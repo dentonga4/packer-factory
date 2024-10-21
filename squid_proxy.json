@@ -1,0 +1,45 @@
+{
+
+    "variables": {
+        "vpc_id": "{{ aws_secretsmanager `pkr_vpc_id` }}",
+        "subnet_id": "{{ aws_secretsmanager `pkr_subnet_id` }}",
+        "sg_id": "{{ aws_secretsmanager `pkr_sg_id` }}",
+        "aws_region": "{{ env `AWS_REGION` }}",
+        "aws_profile": "{{ env `AWS_PROFILE` }}"
+    },
+	"builders": [
+        {
+        "profile": "{{user `aws_region`}}",
+		"type": "amazon-ebs",
+		"region": "eu-west-1",
+        "associate_public_ip_address": true,
+		"source_ami_filter": {
+			"filters": {
+				"virtualization-type": "hvm",
+				"name": "ubuntu/images/*ubuntu-jammy-22.04-amd64-server-*",
+				"root-device-type": "ebs"
+			},
+			"owners": ["099720109477"],
+			"most_recent": true
+		},
+		"instance_type": "t3.small",
+        "vpc_id": "{{user `vpc_id`}}",
+        "subnet_id": "{{user `subnet_id`}}",
+		"ssh_username": "ubuntu",
+		"ami_name": "squid_proxy_{{timestamp}}",
+        "security_group_id": "{{user `sg_id`}}",
+        "tags": {
+            "OS_Version": "Ubuntu",
+            "Name": "squid_proxy_{{timestamp}}"
+        }
+	}],
+    "provisioners": [
+        {
+          "type": "shell",
+          "inline": [
+            "sudo apt install squid -y"
+          ],
+          "pause_before": "10s"
+        }
+      ]
+}
