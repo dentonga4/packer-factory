@@ -9,9 +9,9 @@
     },
 	"builders": [
         {
-        "profile": "{{user `aws_region`}}",
+        "profile": "{{user `aws_profile`}}",
 		"type": "amazon-ebs",
-		"region": "eu-west-1",
+		"region": "{{user `aws_region`}}",
         "associate_public_ip_address": true,
 		"source_ami_filter": {
 			"filters": {
@@ -39,7 +39,7 @@
           "inline": [
             "sudo apt install squid -y"
           ],
-          "pause_before": "10s"
+          "pause_before": "60s"
         }
       ]
 }
