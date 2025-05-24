@@ -32,7 +32,7 @@ fi
 (cd terraform/ && terraform apply --auto-approve=true)
 
 # Run Packer and build machine images
-for filename in ./*.json; do
+for filename in packer/*.json; do
     packer build $filename || true
 done
 
