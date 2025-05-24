@@ -38,6 +38,3 @@ done
 
 # Remove infrastructure required for Packer builds
 (cd terraform/ && terraform destroy --auto-approve=true)
-
-
-# TechDebt: Add AMI Validation Step - Check if  AMI built
